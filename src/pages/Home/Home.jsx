@@ -5,6 +5,8 @@ import OurServices from './OurServices/OurServices';
 import ClientSlider from './marquee/ClientSlider';
 import Features from './Features/Features';
 import BeMerchant from './beMarchant/BeMerchant';
+import TestimonialCarousel from './reviewPagination/TestimonialCarousel';
+import FAQAccordion from './FAQAccordion/FAQAccordion';
 
 
 const Home = () => {
@@ -16,6 +18,8 @@ const Home = () => {
       <ClientSlider></ClientSlider>
       <Features></Features>
       <BeMerchant></BeMerchant>
+      <TestimonialCarousel></TestimonialCarousel>
+      <FAQAccordion></FAQAccordion>
     
     </div>
   );
