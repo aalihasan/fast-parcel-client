@@ -4,6 +4,7 @@ import HowItWorks from './HowItWorks/HowItWorks';
 import OurServices from './OurServices/OurServices';
 import ClientSlider from './marquee/ClientSlider';
 import Features from './Features/Features';
+import BeMerchant from './beMarchant/BeMerchant';
 
 
 const Home = () => {
@@ -14,6 +15,7 @@ const Home = () => {
       <OurServices></OurServices>
       <ClientSlider></ClientSlider>
       <Features></Features>
+      <BeMerchant></BeMerchant>
     
     </div>
   );

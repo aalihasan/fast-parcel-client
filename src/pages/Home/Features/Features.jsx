@@ -8,7 +8,10 @@ const Features = () => {
     <div className="bg-gray-50 py-12 px-4 md:px-16 lg:px-24">
       <div className="max-w-6xl mx-auto space-y-10">
         {/* Live Parcel Tracking */}
-        <div className="flex flex-col md:flex-row items-center bg-white p-6 rounded-lg shadow-md gap-6">
+        <div
+          data-aos="fade-right"
+          className="flex flex-col md:flex-row items-center bg-white p-6 rounded-lg shadow-md gap-6"
+        >
           <img src={trackingImg} alt="Live Tracking" className="w-24 md:w-32" />
           <div>
             <h3 className="text-xl font-semibold mb-1">Live Parcel Tracking</h3>
@@ -21,7 +24,10 @@ const Features = () => {
         </div>
 
         {/* 100% Safe Delivery */}
-        <div className="flex flex-col md:flex-row items-center bg-white p-6 rounded-lg shadow-md gap-6">
+        <div
+          data-aos="fade-left"
+          className="flex flex-col md:flex-row items-center bg-white p-6 rounded-lg shadow-md gap-6"
+        >
           <img src={deliveryImg} alt="Safe Delivery" className="w-24 md:w-32" />
           <div>
             <h3 className="text-xl font-semibold mb-1">100% Safe Delivery</h3>
@@ -34,7 +40,10 @@ const Features = () => {
         </div>
 
         {/* 24/7 Call Center Support */}
-        <div className="flex flex-col md:flex-row items-center bg-white p-6 rounded-lg shadow-md gap-6">
+        <div
+          data-aos="fade-left"
+          className="flex flex-col md:flex-row items-center bg-white p-6 rounded-lg shadow-md gap-6"
+        >
           <img src={supportImg} alt="Support" className="w-24 md:w-32" />
           <div>
             <h3 className="text-xl font-semibold mb-1">

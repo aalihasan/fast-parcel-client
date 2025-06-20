@@ -66,19 +66,25 @@ const OurServices = () => {
       <div className="text-center text-white mb-10">
         <h2 className="text-3xl md:text-4xl font-bold">Our Services</h2>
         <p className="text-sm md:text-base mt-2 max-w-2xl mx-auto">
-          Enjoy fast, reliable parcel delivery with real-time tracking and zero hassle.
-          From personal packages to business shipments — we deliver on time, every time.
+          Enjoy fast, reliable parcel delivery with real-time tracking and zero
+          hassle. From personal packages to business shipments — we deliver on
+          time, every time.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        data-aos="zoom-in"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
         {services.map((service, idx) => (
           <div
             key={idx}
             className={`rounded-xl shadow-md p-6 text-center transition-all duration-300 transform hover:scale-[1.03] ${service.bg} ${service.hoverBg}`}
           >
             <div className="mb-4 flex justify-center">{service.icon}</div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">{service.title}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              {service.title}
+            </h3>
             <p className="text-gray-600 text-sm">{service.description}</p>
           </div>
         ))}
