@@ -4,9 +4,9 @@ import FastLogo from './FastLogo';
 
 const Footer = () => {
   return (
-    <footer className="footer footer-horizontal footer-center bg-neutral text-neutral-contentt p-10">
+    <footer className="footer footer-horizontal footer-center bg-gray-100  p-10">
       <aside>
-   <FastLogo></FastLogo>
+        <FastLogo></FastLogo>
         <p className="font-bold">
           ACME Industries Ltd.
           <br />
