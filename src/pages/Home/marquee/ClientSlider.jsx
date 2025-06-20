@@ -21,17 +21,17 @@ const logos = [
 ];
 const ClientSlider = () => {
   return (
-    <div className="bg-white py-10">
+    <div className="bg-gray-200 py-10 my-10">
       <h2 className="text-center text-3xl font-bold mb-6 text-gray-800">
-        Our Clients
+        We've helped thousands of sales teams
       </h2>
       <Marquee gradient={false} speed={40} pauseOnHover={true}>
         {logos.map((logo, index) => (
-          <div key={index} className="mx-8">
+          <div key={index} className="mx-[100px]">
             <img
               src={logo}
               alt={`Client ${index + 1}`}
-              className="h-16 w-auto object-contain"
+              className="h-5 w-auto object-contain"
             />
           </div>
         ))}
