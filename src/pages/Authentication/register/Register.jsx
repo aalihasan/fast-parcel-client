@@ -4,6 +4,7 @@ import useAuth from '../../../hooks/UseAuth';
 import { FaUserCircle } from 'react-icons/fa';
 import { Link } from 'react-router';
 import { FcGoogle } from 'react-icons/fc';
+import SocialLogin from '../socialLogin/SocialLogin';
 
 
 
@@ -102,10 +103,7 @@ const {
           <hr className="flex-grow border-gray-300" />
         </div>
 
-        <button className="w-full flex items-center justify-center gap-2 py-2 px-4 border rounded bg-gray-100 hover:bg-gray-200 transition">
-          <FcGoogle size={20} />
-          Register with Google
-        </button>
+     <SocialLogin></SocialLogin>
       </div>
     </div>
   );

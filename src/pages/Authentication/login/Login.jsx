@@ -1,8 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { FaUserCircle } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
+
 import { Link } from 'react-router';
+import SocialLogin from '../socialLogin/SocialLogin';
 
 const Login = () => {
   const {
@@ -22,7 +23,7 @@ const Login = () => {
           {/* Logo */}
           <div className="text-left">
             <h2 className="text-3xl font-bold text-gray-900">
-              Create an Account
+              Welcome Back
             </h2>
           </div>
 
@@ -82,7 +83,7 @@ const Login = () => {
 
           <div className="text-sm text-center">
             Don't have any account?{' '}
-            <Link to="/login" className="text-lime-600 hover:underline">
+            <Link to="/register" className="text-lime-600 hover:underline">
               Register
             </Link>
           </div>
@@ -93,10 +94,7 @@ const Login = () => {
             <hr className="flex-grow border-gray-300" />
           </div>
 
-          <button className="w-full flex items-center justify-center gap-2 py-2 px-4 border rounded bg-gray-100 hover:bg-gray-200 transition">
-            <FcGoogle size={20} />
-            Login with Google
-          </button>
+         <SocialLogin></SocialLogin>
         </div>
       </div>
     </div>
