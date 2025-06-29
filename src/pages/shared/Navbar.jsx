@@ -1,14 +1,35 @@
 import React from 'react';
-import { NavLink } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import FastLogo from './FastLogo';
+import useAuth from '../../hooks/useAuth';
 
 const Navbar = () => {
+  const {user}= useAuth()
 
   const navItems = (
     <>
-      <li> <NavLink to="/">Home</NavLink></li>
-      <li> <NavLink to="/coverage">Coverage</NavLink></li>
-      <li><NavLink to="/about">About Us</NavLink></li>
+      <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      <li>
+        <NavLink to="/coverage">Coverage</NavLink>
+      </li>
+      <li>
+       
+        <NavLink to="/dashboard">Dashboard</NavLink>
+      </li>
+
+      {user && (
+        <>
+          <li>
+            {' '}
+            <NavLink to="/sendparcel">Send a parcel</NavLink>
+          </li>
+        </>
+      )}
+      <li>
+        <NavLink to="/about">About Us</NavLink>
+      </li>
     </>
   );
   return (
@@ -36,18 +57,18 @@ const Navbar = () => {
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
-           {navItems}
+            {navItems}
           </ul>
         </div>
-     <FastLogo></FastLogo>
+        <FastLogo></FastLogo>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-        {navItems}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{navItems}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        <Link to="/login" className="btn btn-active btn-warning">
+          Login
+        </Link>
       </div>
     </div>
   );
