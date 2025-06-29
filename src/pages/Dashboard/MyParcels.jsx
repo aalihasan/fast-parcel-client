@@ -1,23 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
-
-
 import Swal from 'sweetalert2';
 import useAuth from '../../hooks/useAuth';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const MyParcels = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const { data: parcels = [], refetch } = useQuery({
-    queryKey: ['my-parcels', user.email],
+
+  const {
+    data: parcels = [],
+    refetch,
+    isLoading,
+  } = useQuery({
+    enabled: !!user?.email, // ✅ Only run when email is available
+    queryKey: ['my-parcels', user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/parcels?email=${user.email}`);
       return res.data;
     },
   });
-
-  console.log(parcels);
 
   const handleView = id => {
     console.log('View parcel', id);
@@ -37,36 +39,48 @@ const MyParcels = () => {
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it',
       cancelButtonText: 'Cancel',
-      confirmButtonColor: '#e11d48', // red-600
-      cancelButtonColor: '#6b7280', // gray-500
+      confirmButtonColor: '#e11d48',
+      cancelButtonColor: '#6b7280',
     });
     if (confirm.isConfirmed) {
       try {
-        axiosSecure.delete(`/parcels/${id}`).then(res => {
-          console.log(res.data);
-          if (res.data.deletedCount) {
-            Swal.fire({
-              title: 'Deleted!',
-              text: 'Parcel has been deleted.',
-              icon: 'success',
-              timer: 1500,
-              showConfirmButton: false,
-            });
-          }
+        const res = await axiosSecure.delete(`/parcels/${id}`);
+        if (res.data.deletedCount) {
+          Swal.fire({
+            title: 'Deleted!',
+            text: 'Parcel has been deleted.',
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false,
+          });
           refetch();
-        });
+        }
       } catch (err) {
         Swal.fire('Error', err.message || 'Failed to delete parcel', 'error');
       }
     }
   };
 
-  const formatDate = iso => {
-    return new Date(iso).toLocaleString(); // Format: "6/22/2025, 3:11:31 AM"
-  };
+  const formatDate = iso => new Date(iso).toLocaleString();
+
+  // 🛑 Safe loading or unauthorized check
+  if (loading || isLoading) {
+    return (
+      <div className="text-center py-20 text-lg font-semibold">Loading...</div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="text-center py-20 text-lg text-red-500">
+        Please login to view your parcels.
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-x-auto shadow-md rounded-xl">
+      <h2 className="font-bold text-center py-2">My Parcels</h2>
       <table className="table table-zebra w-full">
         <thead className="bg-base-200 text-base font-semibold">
           <tr>
@@ -80,51 +94,52 @@ const MyParcels = () => {
           </tr>
         </thead>
         <tbody>
-          {parcels.map((parcel, index) => (
-            <tr key={parcel._id}>
-              <td>{index + 1}</td>
-              <td className="max-w-[180px] truncate">{parcel.title}</td>
-              <td className="capitalize">{parcel.type}</td>
-              <td>{formatDate(parcel.creation_date)}</td>
-              <td>৳{parcel.cost}</td>
-              <td>
-                <span
-                  className={`badge ${
-                    parcel.payment_status === 'paid'
-                      ? 'badge-success'
-                      : 'badge-error'
-                  }`}
-                >
-                  {parcel.payment_status}
-                </span>
-              </td>
-              <td className="space-x-2">
-                <button
-                  onClick={() => handleView(parcel._id)}
-                  className="btn btn-xs btn-outline"
-                >
-                  View
-                </button>
-                {parcel.payment_status === 'unpaid' && (
-                  <button
-                    onClick={() => handlePay(parcel._id)}
-                    className="btn btn-xs btn-primary text-black"
+          {parcels.length > 0 ? (
+            parcels.map((parcel, index) => (
+              <tr key={parcel._id}>
+                <td>{index + 1}</td>
+                <td className="max-w-[180px] truncate">{parcel.title}</td>
+                <td className="capitalize">{parcel.type}</td>
+                <td>{formatDate(parcel.creation_date)}</td>
+                <td>৳{parcel.cost}</td>
+                <td>
+                  <span
+                    className={`badge ${
+                      parcel.payment_status === 'paid'
+                        ? 'badge-success'
+                        : 'badge-error'
+                    }`}
                   >
-                    Pay
+                    {parcel.payment_status}
+                  </span>
+                </td>
+                <td className="space-x-2">
+                  <button
+                    onClick={() => handleView(parcel._id)}
+                    className="btn btn-xs btn-outline"
+                  >
+                    View
                   </button>
-                )}
-                <button
-                  onClick={() => handleDelete(parcel._id)}
-                  className="btn btn-xs btn-error"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-          {parcels.length === 0 && (
+                  {parcel.payment_status === 'unpaid' && (
+                    <button
+                      onClick={() => handlePay(parcel._id)}
+                      className="btn btn-xs btn-primary text-black"
+                    >
+                      Pay
+                    </button>
+                  )}
+                  <button
+                    onClick={() => handleDelete(parcel._id)}
+                    className="btn btn-xs btn-error"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
             <tr>
-              <td colSpan="6" className="text-center text-gray-500 py-6">
+              <td colSpan="7" className="text-center text-gray-500 py-6">
                 No parcels found.
               </td>
             </tr>

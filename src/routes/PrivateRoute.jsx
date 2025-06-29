@@ -1,14 +1,20 @@
 import React from 'react';
+
+import { Navigate, useLocation } from 'react-router';
 import useAuth from '../hooks/UseAuth';
-import { Navigate } from 'react-router';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
+  const location = useLocation();
+  console.log(location);
+
   if (loading) {
     return <span className="loading loading-spinner loading-xl"></span>;
   }
   if (!user) {
-    <Navigate to="/login"></Navigate>;
+    return (
+      <Navigate state={{ from: location.pathname }} to="/login"></Navigate>
+    );
   }
 
   return children;

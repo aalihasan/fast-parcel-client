@@ -30,10 +30,7 @@ export const router = createBrowserRouter([
         path: 'sendparcel',
         element: (
           <PrivateRoute>
-            <SendParcel>
-
-            </SendParcel>,
-            
+            <SendParcel></SendParcel>,
           </PrivateRoute>
         ),
       },
@@ -62,7 +59,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: 'myparcels',
+        path: '/dashboard/myparcels',
         Component: MyParcels,
       },
     ],

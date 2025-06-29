@@ -8,6 +8,7 @@ import 'aos/dist/aos.css';
 import Aos from 'aos'
 import AuthProvider from './contexts/authcontexts/AuthProvider.jsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Toaster } from 'react-hot-toast'
 Aos.init();
 
 const queryClient = new QueryClient();
@@ -18,6 +19,8 @@ createRoot(document.getElementById('root')).render(
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <RouterProvider router={router}></RouterProvider>
+          <Toaster position="top-right" reverseOrder={false}>
+          </Toaster>
         </AuthProvider>
       </QueryClientProvider>
     </div>

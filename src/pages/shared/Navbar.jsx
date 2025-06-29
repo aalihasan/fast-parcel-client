@@ -1,10 +1,21 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink } from 'react-router'; 
+import useAuth from '../../hooks/UseAuth';
 import FastLogo from './FastLogo';
-import useAuth from '../../hooks/useAuth';
+import { toast } from 'react-hot-toast';
 
 const Navbar = () => {
-  const {user}= useAuth()
+  const { user, logOut } = useAuth();
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        toast.success('Logged out successfully!');
+      })
+      .catch(error => {
+        toast.error('Logout failed: ' + error.message);
+      });
+  };
 
   const navItems = (
     <>
@@ -12,26 +23,26 @@ const Navbar = () => {
         <NavLink to="/">Home</NavLink>
       </li>
       <li>
-        <NavLink to="/coverage">Coverage</NavLink>
+        <NavLink to="/sendParcel">Send A Parcel</NavLink>
       </li>
       <li>
-       
-        <NavLink to="/dashboard">Dashboard</NavLink>
+        <NavLink to="/coverage">Coverage</NavLink>
       </li>
 
       {user && (
         <>
           <li>
-            {' '}
-            <NavLink to="/sendparcel">Send a parcel</NavLink>
+            <NavLink to="/dashboard">Dashboard</NavLink>
           </li>
         </>
       )}
+
       <li>
         <NavLink to="/about">About Us</NavLink>
       </li>
     </>
   );
+
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -60,15 +71,23 @@ const Navbar = () => {
             {navItems}
           </ul>
         </div>
-        <FastLogo></FastLogo>
+        <a className="btn btn-ghost text-xl">
+          <FastLogo />
+        </a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{navItems}</ul>
       </div>
       <div className="navbar-end">
-        <Link to="/login" className="btn btn-active btn-warning">
-          Login
-        </Link>
+        {user ? (
+          <button onClick={handleLogOut} className="btn bg-orange-300  ">
+            Log Out
+          </button>
+        ) : (
+          <Link to="/login" className="btn bg-orange-300   ">
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );

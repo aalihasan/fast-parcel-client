@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft, FaArrowRight, FaQuoteLeft } from 'react-icons/fa';
 import image from '../../../assets/image/customer-top.png';
 
@@ -7,6 +7,7 @@ const TestimonialCarousel = () => {
   const [centerIndex, setCenterIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const sliderRef = useRef(null);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -25,6 +26,16 @@ const TestimonialCarousel = () => {
     };
     fetchTestimonials();
   }, []);
+
+  useEffect(() => {
+    if (testimonials.length < 2) return; // no auto slide if less than 2
+
+    const interval = setInterval(() => {
+      setCenterIndex(prev => (prev + 1) % testimonials.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [testimonials]);
 
   const total = testimonials.length;
   const getIndex = i => (i + total) % total;
@@ -99,15 +110,7 @@ const TestimonialCarousel = () => {
     );
   }
 
-  const leftIndex = getIndex(centerIndex - 1);
-  const rightIndex = getIndex(centerIndex + 1);
-
-  const cardsToShow = [
-    { ...testimonials[leftIndex], position: 'left' },
-    { ...testimonials[centerIndex], position: 'center' },
-    { ...testimonials[rightIndex], position: 'right' },
-  ];
-
+  // For 3 or more testimonials, smooth sliding effect
   return (
     <div className="py-12 px-4 md:px-16 bg-gray-50 text-center max-w-5xl mx-auto">
       {/* Illustration */}
@@ -125,70 +128,82 @@ const TestimonialCarousel = () => {
       </p>
 
       <div
-        className="relative flex   items-center justify-center gap-6 overflow-visible"
+        className="relative overflow-hidden"
         style={{ perspective: '1000px' }}
       >
-        {cardsToShow.map(item => {
-          const isActive = item.position === 'center';
+        <div
+          ref={sliderRef}
+          className="flex transition-transform duration-700 ease-in-out"
+          style={{ transform: `translateX(-${centerIndex * 33.3333}%)` }}
+        >
+          {testimonials.map((item, idx) => {
+            // Determine active state for scaling and opacity
+            const isActive = idx === centerIndex;
+            const isLeft = idx === (centerIndex - 1 + total) % total;
+            const isRight = idx === (centerIndex + 1) % total;
 
-         
-          return (
-            <div
-              key={item.id}
-              className={`bg-white rounded-xl p-2 text-justify shadow-lg transition-all duration-500 ease-in-out
-                ${
-                  isActive
-                    ? 'scale-105 z-20 shadow-2xl'
-                    : 'scale-90 opacity-40 z-10'
-                }
-              `}
-              style={{
-                flex: '0 0 30%',
-                transformOrigin: 'center bottom',
-                marginTop: isActive ? '-20px' : '0',
-                boxShadow: isActive ? '0 10px 20px rgba(0, 0, 0, 0.2)' : 'none',
-                cursor: 'pointer',
-                userSelect: 'none',
-              }}
-            >
-              <FaQuoteLeft
-                className={`text-2xl mb-4 ${
-                  isActive ? 'text-teal-600' : 'text-gray-400'
-                }`}
-              />
-              <p
-                className={`mb-6 ${
-                  isActive ? 'text-gray-700' : 'text-gray-500'
-                }`}
+            let scale = 0.9;
+            let opacity = 0.4;
+            if (isActive) {
+              scale = 1.05;
+              opacity = 1;
+            } else if (isLeft || isRight) {
+              scale = 0.95;
+              opacity = 0.7;
+            }
+
+            return (
+              <div
+                key={item.id}
+                className="bg-white rounded-xl p-6 mx-2 text-justify shadow-lg select-none"
+                style={{
+                  flex: '0 0 33.3333%',
+                  transform: `scale(${scale})`,
+                  opacity: opacity,
+                  transition: 'transform 0.7s ease, opacity 0.7s ease',
+                  cursor: 'pointer',
+                  userSelect: 'none',
+                }}
               >
-                {item.text}
-              </p>
-              <div className="flex items-center gap-3">
-                <div
-                  className={`w-8 h-8 rounded-full ${
-                    isActive ? 'bg-teal-900' : 'bg-gray-400'
+                <FaQuoteLeft
+                  className={`text-2xl mb-4 ${
+                    isActive ? 'text-teal-600' : 'text-gray-400'
                   }`}
-                ></div>
-                <div className="text-left">
-                  <p
-                    className={`font-semibold text-sm ${
-                      isActive ? 'text-gray-800' : 'text-gray-500'
+                />
+                <p
+                  className={`mb-6 ${
+                    isActive ? 'text-gray-700' : 'text-gray-500'
+                  }`}
+                >
+                  {item.text}
+                </p>
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`w-8 h-8 rounded-full ${
+                      isActive ? 'bg-teal-900' : 'bg-gray-400'
                     }`}
-                  >
-                    {item.name}
-                  </p>
-                  <p
-                    className={`text-xs ${
-                      isActive ? 'text-gray-500' : 'text-gray-400'
-                    }`}
-                  >
-                    {item.role}
-                  </p>
+                  ></div>
+                  <div className="text-left">
+                    <p
+                      className={`font-semibold text-sm ${
+                        isActive ? 'text-gray-800' : 'text-gray-500'
+                      }`}
+                    >
+                      {item.name}
+                    </p>
+                    <p
+                      className={`text-xs ${
+                        isActive ? 'text-gray-500' : 'text-gray-400'
+                      }`}
+                    >
+                      {item.role}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {/* Controls */}
@@ -200,18 +215,6 @@ const TestimonialCarousel = () => {
         >
           <FaArrowLeft />
         </button>
-
-        {/* Pagination dots */}
-        {testimonials.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCenterIndex(idx)}
-            className={`w-3 h-3 rounded-full mx-1 focus:outline-none ${
-              idx === centerIndex ? 'bg-teal-600' : 'bg-gray-300'
-            }`}
-            aria-label={`Go to testimonial ${idx + 1}`}
-          />
-        ))}
 
         <button
           onClick={next}
