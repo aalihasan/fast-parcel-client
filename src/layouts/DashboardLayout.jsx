@@ -34,7 +34,9 @@ const DashboardLayout = () => {
           <div className="mx-2 flex-1 px-2 lg:hidden">Dashboard</div>
         </div>
         {/* Page content here */}
-        <Outlet></Outlet>
+        <div className='mt-5'>
+          <Outlet></Outlet>
+        </div>
         {/* Page content here */}
       </div>
       <div className="drawer-side">
@@ -47,7 +49,7 @@ const DashboardLayout = () => {
           {/* Sidebar content here */}
           <FastLogo></FastLogo>
           <li>
-           <NavLink to='/'>Home</NavLink>
+            <NavLink to="/">Home</NavLink>
           </li>
           <li>
             <NavLink to="/dashboard/myParcels">My Parcels</NavLink>
